@@ -25,7 +25,7 @@ namespace LibLogger.Test
 		public void create_counters_group()
 		{
 			LogManager manager = new LogManager();
-			CounterGroupModel groups = manager.Default.MetricGroups.Create<CounterGroupModel>("group", MetricUnitModel.Bytes);
+			CounterGroupModel groups = manager.Default.Metrics.Create<CounterGroupModel>("group", MetricUnitModel.Bytes);
 
 				// Añade los contadores
 				groups.Counters["first"].Increment();
@@ -34,9 +34,9 @@ namespace LibLogger.Test
 				groups.Counters["second"].Decrement();
 				// Obtiene los valores
 				groups.Counters.Count.Should().Be(2);
-				manager.Default.MetricGroups.GetGroup<CounterGroupModel>("group").Counters.Count.Should().Be(2);
-				manager.Default.MetricGroups.GetGroup<CounterGroupModel>("group").Counters["first"].Value.Should().Be(1);
-				manager.Default.MetricGroups.GetGroup<CounterGroupModel>("group").Counters["second"].Value.Should().Be(3);
+				manager.Default.Metrics.GetGroup<CounterGroupModel>("group").Counters.Count.Should().Be(2);
+				manager.Default.Metrics.GetGroup<CounterGroupModel>("group").Counters["first"].Value.Should().Be(1);
+				manager.Default.Metrics.GetGroup<CounterGroupModel>("group").Counters["second"].Value.Should().Be(3);
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace LibLogger.Test
 		public void create_gauges_group()
 		{
 			LogManager manager = new LogManager();
-			GaugeGroupModel groups = manager.Default.MetricGroups.Create<GaugeGroupModel>("group", MetricUnitModel.Bytes);
+			GaugeGroupModel groups = manager.Default.Metrics.Create<GaugeGroupModel>("group", MetricUnitModel.Bytes);
 
 				// Añade los contadores
 				groups.Gauges["first"].Assign(3);
@@ -55,11 +55,11 @@ namespace LibLogger.Test
 				groups.Gauges["second"].Assign(2);
 				// Obtiene los valores
 				groups.Gauges.Count.Should().Be(2);
-				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges.Count.Should().Be(2);
-				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges["first"].Value.Should().Be(3);
-				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges["second"].Value.Should().Be(2);
-				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges["second"].Minimum.Should().Be(1);
-				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges["second"].Maximum.Should().Be(7);
+				manager.Default.Metrics.GetGroup<GaugeGroupModel>("group").Gauges.Count.Should().Be(2);
+				manager.Default.Metrics.GetGroup<GaugeGroupModel>("group").Gauges["first"].Value.Should().Be(3);
+				manager.Default.Metrics.GetGroup<GaugeGroupModel>("group").Gauges["second"].Value.Should().Be(2);
+				manager.Default.Metrics.GetGroup<GaugeGroupModel>("group").Gauges["second"].Minimum.Should().Be(1);
+				manager.Default.Metrics.GetGroup<GaugeGroupModel>("group").Gauges["second"].Maximum.Should().Be(7);
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace LibLogger.Test
 		public void create_meter_group()
 		{
 			LogManager manager = new LogManager();
-			MeterGroupModel groups = manager.Default.MetricGroups.Create<MeterGroupModel>("group", MetricUnitModel.Bytes);
+			MeterGroupModel groups = manager.Default.Metrics.Create<MeterGroupModel>("group", MetricUnitModel.Bytes);
 
 				// Espera al siguiente minuto
 				WaitNextMinute();
@@ -94,7 +94,7 @@ namespace LibLogger.Test
 		public void create_histogram_group()
 		{
 			LogManager manager = new LogManager();
-			HistogramGroupModel group = manager.Default.MetricGroups.Create<HistogramGroupModel>("Group", MetricUnitModel.Bytes);
+			HistogramGroupModel group = manager.Default.Metrics.Create<HistogramGroupModel>("Group", MetricUnitModel.Bytes);
 
 				// Incrementa, decrementa diferentes datos
 				group.Histograms["first"].Add(1);
@@ -136,7 +136,7 @@ namespace LibLogger.Test
 				// Espera al siguiente minuto
 				WaitNextMinute();
 				// Crea la métrica
-				group = manager.Default.MetricGroups.Create<TimerGroupModel>("Group", MetricUnitModel.Bytes);
+				group = manager.Default.Metrics.Create<TimerGroupModel>("Group", MetricUnitModel.Bytes);
 				// Incrementa, decrementa diferentes datos
 				group.Timers["first"].Mark(30);
 				group.Timers["first"].Mark(10);

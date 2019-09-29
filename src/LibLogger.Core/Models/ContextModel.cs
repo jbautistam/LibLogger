@@ -16,7 +16,7 @@ namespace Bau.Libraries.LibLogger.Core.Models
 			App = app;
 			LogRecords = new Log.LogModelCollection(this);
 			//Metrics = new MetricModelCollection(this);
-			MetricGroups = new MetricGroupModelCollection(this);
+			Metrics = new MetricGroupModelCollection(this);
 		}
 
 		/// <summary>
@@ -55,14 +55,9 @@ namespace Bau.Libraries.LibLogger.Core.Models
 		/// </summary>
 		public Log.LogModelCollection LogRecords { get; }
 
-		///// <summary>
-		/////		Métricas
-		///// </summary>
-		//public MetricModelCollection Metrics { get; }
-
 		/// <summary>
 		///		Grupos de métricas
 		/// </summary>
-		public MetricGroupModelCollection MetricGroups { get; }
+		public MetricGroupModelCollection Metrics { get; }
 	}
 }

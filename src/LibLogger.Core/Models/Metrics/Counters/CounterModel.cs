@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Bau.Libraries.LibLogger.Core.Models.Metrics
+namespace Bau.Libraries.LibLogger.Core.Models.Metrics.Counters
 {
 	/// <summary>
 	///		Contador
 	/// </summary>
-	public class MetricCounterModel : MetricModel
+	public class CounterModel : MetricModel
 	{
 		/// <summary>
 		///		Incrementa un contador

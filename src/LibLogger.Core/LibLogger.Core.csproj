@@ -5,4 +5,8 @@
     <RootNamespace>Bau.Libraries.LibLogger.Core</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Models\Metrics\Histograms\HistogramSerieModel.cs" />
+  </ItemGroup>
+
 </Project>

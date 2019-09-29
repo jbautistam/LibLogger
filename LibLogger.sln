@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibLogger.Core", "LibLogger.Core\LibLogger.Core.csproj", "{5E79352E-841F-481D-85A4-C76B929C6ECF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibLogger.Core", "src\LibLogger.Core\LibLogger.Core.csproj", "{5E79352E-841F-481D-85A4-C76B929C6ECF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibLogger.Test", "LibLogger.Test\LibLogger.Test.csproj", "{E1E98928-1DC3-4F93-9C0E-0964A16BAF22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibLogger.Test", "Tests\LibLogger.Test\LibLogger.Test.csproj", "{E1E98928-1DC3-4F93-9C0E-0964A16BAF22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

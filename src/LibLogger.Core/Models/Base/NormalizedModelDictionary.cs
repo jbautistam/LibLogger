@@ -77,5 +77,22 @@ namespace Bau.Libraries.LibLogger.Core.Models.Base
 		///		Diccionario
 		/// </summary>
 		protected Dictionary<string, TypeData> Dictionary { get; } = new Dictionary<string, TypeData>();
+
+		/// <summary>
+		///		Número de elementos
+		/// </summary>
+		public int Count 
+		{ 
+			get { return Dictionary.Count; }
+		}
+
+		/// <summary>
+		///		Indizador de elementos
+		/// </summary>
+		public TypeData this[string key]
+		{
+			get { return Get(key); }
+			set { Add(key, value); }
+		}
 	}
 }

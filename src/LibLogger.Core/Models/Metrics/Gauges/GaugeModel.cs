@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Bau.Libraries.LibLogger.Core.Models.Metrics
+namespace Bau.Libraries.LibLogger.Core.Models.Metrics.Gauges
 {
 	/// <summary>
 	///		Métrica para almacenar un valor
 	/// </summary>
-	public class MetricGaugeModel : MetricModel
+	public class GaugeModel : MetricModel
 	{
 		// Variables privadas
 		private	bool _first = true;

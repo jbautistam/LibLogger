@@ -1,17 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Bau.Libraries.LibLogger.Core.Models.Metrics
+namespace Bau.Libraries.LibLogger.Core.Models.Metrics.Histograms
 {
 	/// <summary>
-	///		Elementos de una serie de <see cref="MetricHistogramModel"/>
+	///		Métrica con un histograma
 	/// </summary>
-	public class MetricHistogramSerieModel
+	public class HistogramModel : MetricModel
 	{
+		/// <summary>
+		///		Añade un valor al histograma
+		/// </summary>
+		public void Add(double value)
+		{
+			Values.Add(value);
+		}
+
+		/// <summary>
+		///		Inicializa el histograma
+		/// </summary>
+		public override void Reset()
+		{
+			Values.Clear();
+		}
+
 		/// <summary>
 		///		Valores
 		/// </summary>
-		public List<double> Values { get; } = new List<double>();
+		internal List<double> Values { get; } = new List<double>();
+
+		/// <summary>
+		///		Cuenta el número de elementos
+		/// </summary>
+		public int Count
+		{
+			get { return Values.Count; }
+		}
 
 		/// <summary>
 		///		Suma

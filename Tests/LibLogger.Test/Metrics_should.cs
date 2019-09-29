@@ -4,6 +4,11 @@ using FluentAssertions;
 
 using Bau.Libraries.LibLogger.Core;
 using Bau.Libraries.LibLogger.Core.Models.Metrics;
+using Bau.Libraries.LibLogger.Core.Models.Metrics.Counters;
+using Bau.Libraries.LibLogger.Core.Models.Metrics.Gauges;
+using Bau.Libraries.LibLogger.Core.Models.Metrics.Histograms;
+using Bau.Libraries.LibLogger.Core.Models.Metrics.Meters;
+using Bau.Libraries.LibLogger.Core.Models.Metrics.Timers;
 
 namespace LibLogger.Test
 {
@@ -12,195 +17,153 @@ namespace LibLogger.Test
 	/// </summary>
 	public class Metrics_should
 	{
+
 		/// <summary>
-		///		Comprueba que se puede crear un contador
+		///		Crea un grupo de contadores
 		/// </summary>
 		[Fact]
-		public void CreateCounter()
+		public void create_counters_group()
 		{
 			LogManager manager = new LogManager();
+			CounterGroupModel groups = manager.Default.MetricGroups.Create<CounterGroupModel>("group", MetricUnitModel.Bytes);
 
-				// Crea un contador
-				manager.Default.Metrics.Create<MetricCounterModel>("Main", "Group", "number");
-				// Obtiene el contador
-				manager.Default.Metrics.Get("Main").Should().NotBeNull();
+				// Añade los contadores
+				groups.Counters["first"].Increment();
+				groups.Counters["second"].Increment();
+				groups.Counters["second"].Increment(3);
+				groups.Counters["second"].Decrement();
+				// Obtiene los valores
+				groups.Counters.Count.Should().Be(2);
+				manager.Default.MetricGroups.GetGroup<CounterGroupModel>("group").Counters.Count.Should().Be(2);
+				manager.Default.MetricGroups.GetGroup<CounterGroupModel>("group").Counters["first"].Value.Should().Be(1);
+				manager.Default.MetricGroups.GetGroup<CounterGroupModel>("group").Counters["second"].Value.Should().Be(3);
 		}
 
 		/// <summary>
-		///		Comprueba que se puede tratar un contador
+		///		Crea un grupo de gauge
 		/// </summary>
 		[Fact]
-		public void TreatCounter()
+		public void create_gauges_group()
 		{
 			LogManager manager = new LogManager();
-			MetricCounterModel counter;
+			GaugeGroupModel groups = manager.Default.MetricGroups.Create<GaugeGroupModel>("group", MetricUnitModel.Bytes);
 
-				// Crea un contador
-				counter = manager.Default.Metrics.Create<MetricCounterModel>("Main", "Group", "number");
-				// Incrementa, decrementa diferentes datos
-				counter.Increment(5);
-				counter.Decrement(2);
-				// Comprueba el resultado
-				counter.Value.Should().Be(3);
-		}
-
-		/// <summary>
-		///		Comprueba que se pueden tratar varios contador
-		/// </summary>
-		[Fact]
-		public void TreatCounters()
-		{
-			LogManager manager = new LogManager();
-			MetricCounterModel counter, counter2, counter3;
-
-				// Crea varios contadores
-				counter = manager.Default.Metrics.Create<MetricCounterModel>("first", "Group", "number");
-				counter2 = manager.Default.Metrics.Create<MetricCounterModel>("second", "Group", "number");
-				counter3 = manager.Default.Metrics.Create<MetricCounterModel>("third", "Group", "number");
-				// Incrementa, decrementa diferentes datos
-				counter.Increment(5);
-				counter2.Increment(7);
-				counter3.Increment(12);
-				// Comprueba los resultados
-				manager.Default.Metrics.GetMetric<MetricCounterModel>("first").Value.Should().Be(5);
-				manager.Default.Metrics.GetMetric<MetricCounterModel>("second").Value.Should().Be(7);
-				manager.Default.Metrics.GetMetric<MetricCounterModel>("third").Value.Should().Be(12);
-		}
-
-		/// <summary>
-		///		Comprueba que se puede crear un valor Gauge
-		/// </summary>
-		[Fact]
-		public void CreateGauge()
-		{
-			LogManager manager = new LogManager();
-
-				// Crea un contador
-				manager.Default.Metrics.Create<MetricGaugeModel>("Main", "Group", "number");
-				// Obtiene el contador
-				manager.Default.Metrics.Get("Main").Should().NotBeNull();
-		}
-
-		/// <summary>
-		///		Comprueba que se puede tratar un valor gauge
-		/// </summary>
-		[Fact]
-		public void TreatGauge()
-		{
-			LogManager manager = new LogManager();
-			MetricGaugeModel gauge;
-
-				// Crea un contador
-				gauge = manager.Default.Metrics.Create<MetricGaugeModel>("Main", "Group", "number");
-				// Incrementa, decrementa diferentes datos
-				gauge.Assign(5);
-				gauge.Assign(3);
-				gauge.Assign(2);
-				gauge.Assign(1);
-				// Comprueba el resultado
-				gauge.Value.Should().Be(1);
-		}
-
-		/// <summary>
-		///		Comprueba que se puede tratar los valores máximos y mínimos del gauge
-		/// </summary>
-		[Fact]
-		public void TreatGaugeMaximum()
-		{
-			LogManager manager = new LogManager();
-			MetricGaugeModel gauge;
-
-				// Crea un contador
-				gauge = manager.Default.Metrics.Create<MetricGaugeModel>("Main", "Group", "number");
-				// Incrementa, decrementa diferentes datos
-				gauge.Assign(5);
-				gauge.Assign(3);
-				gauge.Assign(2);
-				gauge.Assign(1);
-				gauge.Assign(4);
-				// Comprueba los resultados
-				gauge.Value.Should().Be(4);
-				gauge.Maximum.Should().Be(5);
-				gauge.Minimum.Should().Be(1);
+				// Añade los contadores
+				groups.Gauges["first"].Assign(3);
+				groups.Gauges["second"].Assign(1);
+				groups.Gauges["second"].Assign(7);
+				groups.Gauges["second"].Assign(2);
+				// Obtiene los valores
+				groups.Gauges.Count.Should().Be(2);
+				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges.Count.Should().Be(2);
+				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges["first"].Value.Should().Be(3);
+				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges["second"].Value.Should().Be(2);
+				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges["second"].Minimum.Should().Be(1);
+				manager.Default.MetricGroups.GetGroup<GaugeGroupModel>("group").Gauges["second"].Maximum.Should().Be(7);
 		}
 
 		/// <summary>
 		///		Comprueba que se puede tratar un valor de métrica
 		/// </summary>
 		[Fact]
-		public void TreatMeter()
+		public void create_meter_group()
 		{
 			LogManager manager = new LogManager();
-			MetricMeterModel meter;
+			MeterGroupModel groups = manager.Default.MetricGroups.Create<MeterGroupModel>("group", MetricUnitModel.Bytes);
 
-				// Crea un contador
-				meter = manager.Default.Metrics.Create<MetricMeterModel>("Main", "Group", "number");
-				// Incrementa, decrementa diferentes datos
-				meter.Mark();
-				// Comprueba el resultado
-				meter.MeterLastMinute.Should().Be(1);
-				meter.MeterLastFiveMinutes.Should().Be(1);
-				meter.MeterLastFifteenMinutes.Should().Be(1);
+				// Espera al siguiente minuto
+				WaitNextMinute();
+				// Añade los contadores
+				groups.Meters["first"].Mark();
+				groups.Meters["first"].Mark();
+				groups.Meters["second"].Mark();
+				groups.Meters["second"].Mark();
+				groups.Meters["second"].Mark();
+				// Obtiene los valores
+				groups.Meters.Count.Should().Be(2);
+				groups.Meters["first"].LastMinute.Should().Be(2);
+				groups.Meters["first"].LastFiveMinutes.Should().Be(2);
+				groups.Meters["first"].LastFifteenMinutes.Should().Be(2);
+				groups.Meters["second"].LastMinute.Should().Be(3);
 		}
 
 		/// <summary>
 		///		Comprueba que se puede tratar un valor de histograma
 		/// </summary>
 		[Fact]
-		public void TreatHistogram()
+		public void create_histogram_group()
 		{
 			LogManager manager = new LogManager();
-			MetricHistogramModel meter;
+			HistogramGroupModel group = manager.Default.MetricGroups.Create<HistogramGroupModel>("Group", MetricUnitModel.Bytes);
 
-				// Crea un contador
-				meter = manager.Default.Metrics.Create<MetricHistogramModel>("Main", "Group", MetricUnitModel.Bytes);
 				// Incrementa, decrementa diferentes datos
-				meter.Update("first", 1);
-				meter.Update("second", 2);
-				meter.Update("third", 3);
-				meter.Update("first", 4);
-				meter.Update("second", 5);
-				meter.Update("third", 6);
-				meter.Update("third", 7);
+				group.Histograms["first"].Add(1);
+				group.Histograms["second"].Add(2);
+				group.Histograms["third"].Add(3);
+				group.Histograms["first"].Add(4);
+				group.Histograms["second"].Add(5);
+				group.Histograms["third"].Add(6);
+				group.Histograms["third"].Add(7);
 				// Comprueba el resultado de first
-				meter.Series.Get("first").Values.Count.Should().Be(2);
-				meter.Series.Get("first").Maximum.Should().Be(4);
-				meter.Series.Get("first").Minimum.Should().Be(1);
-				meter.Series.Get("first").Total.Should().Be(5);
-				meter.Series.Get("first").Average.Should().Be((1.0 + 4.0) / 2.0);
+				group.Histograms["first"].Count.Should().Be(2);
+				group.Histograms["first"].Maximum.Should().Be(4);
+				group.Histograms["first"].Minimum.Should().Be(1);
+				group.Histograms["first"].Total.Should().Be(5);
+				group.Histograms["first"].Average.Should().Be((1.0 + 4.0) / 2.0);
 				// Comprueba el resultado de second
-				meter.Series.Get("second").Values.Count.Should().Be(2);
-				meter.Series.Get("second").Maximum.Should().Be(5);
-				meter.Series.Get("second").Minimum.Should().Be(2);
-				meter.Series.Get("second").Total.Should().Be(7);
-				meter.Series.Get("second").Average.Should().Be((2.0 + 5.0) / 2.0);
+				group.Histograms["second"].Count.Should().Be(2);
+				group.Histograms["second"].Maximum.Should().Be(5);
+				group.Histograms["second"].Minimum.Should().Be(2);
+				group.Histograms["second"].Total.Should().Be(7);
+				group.Histograms["second"].Average.Should().Be((2.0 + 5.0) / 2.0);
 				// Comprueba el resultado de third
-				meter.Series.Get("third").Values.Count.Should().Be(3);
-				meter.Series.Get("third").Maximum.Should().Be(7);
-				meter.Series.Get("third").Minimum.Should().Be(3);
-				meter.Series.Get("third").Total.Should().Be(3 + 6 + 7);
-				meter.Series.Get("third").Average.Should().Be((3.0 + 6.0 + 7.0) / 3.0);
+				group.Histograms["third"].Count.Should().Be(3);
+				group.Histograms["third"].Maximum.Should().Be(7);
+				group.Histograms["third"].Minimum.Should().Be(3);
+				group.Histograms["third"].Total.Should().Be(3 + 6 + 7);
+				group.Histograms["third"].Average.Should().Be((3.0 + 6.0 + 7.0) / 3.0);
 		}
 
 		/// <summary>
 		///		Comprueba que se puede tratar un valor de temporizador
 		/// </summary>
 		[Fact]
-		public void TreatTimer()
+		public void create_timer_group()
 		{
 			LogManager manager = new LogManager();
-			MetricTimerModel meter;
+			TimerGroupModel group;
 
+				// Espera al siguiente minuto
+				WaitNextMinute();
 				// Crea la métrica
-				meter = manager.Default.Metrics.Create<MetricTimerModel>("Main", "Group", MetricUnitModel.Bytes);
+				group = manager.Default.MetricGroups.Create<TimerGroupModel>("Group", MetricUnitModel.Bytes);
 				// Incrementa, decrementa diferentes datos
-				meter.Mark("first", 30);
-				// Comprueba el resultado
-				meter.MeterLastMinute.Get("first").Series.Get("third").Values.Count.Should().Be(3);
-				meter.Series.Get("third").Maximum.Should().Be(7);
-				meter.Series.Get("third").Minimum.Should().Be(3);
-				meter.Series.Get("third").Total.Should().Be(3 + 6 + 7);
-				meter.Series.Get("third").Average.Should().Be((3.0 + 6.0 + 7.0) / 3.0);
+				group.Timers["first"].Mark(30);
+				group.Timers["first"].Mark(10);
+				group.Timers["first"].Mark(20);
+				group.Timers["second"].Mark(40);
+				// Comprueba el resultado de la primera serie
+				group.Timers["first"].LastMinute.Count.Should().Be(3);
+				group.Timers["first"].LastMinute.Total.Should().Be(10 + 20 + 30);
+				group.Timers["first"].LastMinute.Minimum.Should().Be(10);
+				group.Timers["first"].LastMinute.Maximum.Should().Be(30);
+				group.Timers["first"].LastMinute.Average.Should().Be((10.0 + 20.0 + 30.0) / 3.0);
+				// Comprueba el resultado de la segunda serie
+				group.Timers["second"].LastMinute.Count.Should().Be(1);
+		}
+
+		/// <summary>
+		///		Espera al siguiente minuto
+		/// </summary>
+		private void WaitNextMinute()
+		{
+			DateTime now = DateTime.Now;
+
+				while (now.Second > 50)
+				{
+					System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(1));
+					now = DateTime.Now;
+				}
 		}
 	}
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Bau.Libraries.LibLogger.Core.Models.Metrics
+namespace Bau.Libraries.LibLogger.Core.Models.Metrics.Meters
 {
 	/// <summary>
 	///		Definición de una métrica para medir tiempos y ratios de sucesos
 	/// </summary>
-	public class MetricMeterModel : MetricModel
+	public class MeterModel : MetricModel
 	{
 		/// <summary>
 		///		Marca una métrica
@@ -45,7 +45,7 @@ namespace Bau.Libraries.LibLogger.Core.Models.Metrics
 		/// <summary>
 		///		Obtiene las métricas del último minuto
 		/// </summary>
-		public long MeterLastMinute 
+		public long LastMinute 
 		{ 
 			get { return GetMarksLast(1); }
 		}
@@ -53,7 +53,7 @@ namespace Bau.Libraries.LibLogger.Core.Models.Metrics
 		/// <summary>
 		///		Obtiene las métricas de los últimos cinco minutos
 		/// </summary>
-		public long MeterLastFiveMinutes 
+		public long LastFiveMinutes 
 		{ 
 			get { return GetMarksLast(5); }
 		}
@@ -61,7 +61,7 @@ namespace Bau.Libraries.LibLogger.Core.Models.Metrics
 		/// <summary>
 		///		Obtiene las métricas de los últimos quince minutos
 		/// </summary>
-		public long MeterLastFifteenMinutes 
+		public long LastFifteenMinutes 
 		{ 
 			get { return GetMarksLast(15); }
 		}

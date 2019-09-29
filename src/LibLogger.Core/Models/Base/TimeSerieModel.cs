@@ -31,6 +31,7 @@ namespace Bau.Libraries.LibLogger.Core.Models.Base
 						{
 							// Calcula el valor
 							meter.value = computeValue(meter.value);
+							Meters[index] = meter;
 							// Indica que se ha modificado
 							found = true;
 						}

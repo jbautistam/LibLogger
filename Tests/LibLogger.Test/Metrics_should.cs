@@ -3,12 +3,12 @@ using Xunit;
 using FluentAssertions;
 
 using Bau.Libraries.LibLogger.Core;
-using Bau.Libraries.LibLogger.Core.Models.Metrics;
-using Bau.Libraries.LibLogger.Core.Models.Metrics.Counters;
-using Bau.Libraries.LibLogger.Core.Models.Metrics.Gauges;
-using Bau.Libraries.LibLogger.Core.Models.Metrics.Histograms;
-using Bau.Libraries.LibLogger.Core.Models.Metrics.Meters;
-using Bau.Libraries.LibLogger.Core.Models.Metrics.Timers;
+using Bau.Libraries.LibLogger.Models.Metrics;
+using Bau.Libraries.LibLogger.Models.Metrics.Counters;
+using Bau.Libraries.LibLogger.Models.Metrics.Gauges;
+using Bau.Libraries.LibLogger.Models.Metrics.Histograms;
+using Bau.Libraries.LibLogger.Models.Metrics.Meters;
+using Bau.Libraries.LibLogger.Models.Metrics.Timers;
 
 namespace LibLogger.Test
 {
@@ -17,7 +17,6 @@ namespace LibLogger.Test
 	/// </summary>
 	public class Metrics_should
 	{
-
 		/// <summary>
 		///		Crea un grupo de contadores
 		/// </summary>

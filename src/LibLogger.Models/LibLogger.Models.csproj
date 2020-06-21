@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Bau.Libraries.LibLogger.Core</RootNamespace>
+    <RootNamespace>Bau.LibrariesLibLogger.Models</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibLogger.Interfaces\LibLogger.Interfaces.csproj" />
-    <ProjectReference Include="..\LibLogger.Models\LibLogger.Models.csproj" />
+    <Compile Remove="Metrics\Base\SetBaseModel.cs" />
+    <Compile Remove="Metrics\Base\SetBaseModelDictionary.cs" />
   </ItemGroup>
 
 </Project>

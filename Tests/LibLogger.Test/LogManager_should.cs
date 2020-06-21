@@ -3,7 +3,7 @@ using Xunit;
 using FluentAssertions;
 
 using Bau.Libraries.LibLogger.Core;
-using Bau.Libraries.LibLogger.Core.Models;
+using Bau.Libraries.LibLogger.Models;
 
 namespace LibLogger.Test
 {
@@ -23,6 +23,7 @@ namespace LibLogger.Test
 				// Comprueba los datos del contexto predeterminado
 				manager.Default.Should().NotBeNull();
 				manager.Default.Key.Should().Be("Default");
+				manager.Contexts.Count.Should().Be(1);
 		}
 
 		/// <summary>
@@ -39,6 +40,7 @@ namespace LibLogger.Test
 				context.Should().NotBeNull();
 				context.Key.Should().Be("First");
 				context.App.Should().Be("TestApp");
+				manager.Contexts.Count.Should().Be(2);
 		}
 
 		/// <summary>

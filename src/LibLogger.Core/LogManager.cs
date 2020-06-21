@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Bau.Libraries.LibLogger.Core.Models;
+using Bau.Libraries.LibLogger.Models;
+using Bau.Libraries.LibLogger.Models.Log;
 
 namespace Bau.Libraries.LibLogger.Core
 {
@@ -11,12 +12,12 @@ namespace Bau.Libraries.LibLogger.Core
 	public class LogManager : IDisposable
 	{
 		// Eventos
-		public event EventHandler<EventArguments.LogEventArgs> Logged;
+		public event EventHandler<Models.EventArguments.LogEventArgs> Logged;
 
-		public LogManager()
+		public LogManager(int maxItems = 30_000)
 		{
-			Contexts = new ContextModelCollection(this);
-			Default = CreateContext("Default", "LogManager");
+			Default = CreateContext("Default", GetType().ToString());
+			MaxItems = maxItems;
 		}
 
 		/// <summary>
@@ -24,7 +25,12 @@ namespace Bau.Libraries.LibLogger.Core
 		/// </summary>
 		public ContextModel CreateContext(string key, string app)
 		{
-			return Contexts.Add(key, new ContextModel(this, key, app));
+			ContextModel context = new ContextModel(key, app);
+
+				// Asigna el manejador de eventos
+				context.Logged += (sender, args) => RaiseLog(args.Item);
+				// Añade el contexto a la colección
+				return Contexts.Add(key, context);
 		}
 
 		/// <summary>
@@ -38,7 +44,7 @@ namespace Bau.Libraries.LibLogger.Core
 		/// <summary>
 		///		Añade un objeto de escritura del log
 		/// </summary>
-		public void AddWriter(Writers.ILogWriter writer)
+		public void AddWriter(Interfaces.ILogWriter writer)
 		{
 			Writers.Add(writer);
 		}
@@ -46,9 +52,21 @@ namespace Bau.Libraries.LibLogger.Core
 		/// <summary>
 		///		Lanza el evento de log
 		/// </summary>
-		internal void RaiseLog(Models.Log.LogModel log)
+		private void RaiseLog(LogModel log)
 		{
-			Logged?.Invoke(this, new EventArguments.LogEventArgs(log.Level, log));
+			// Lanza el evento de log
+			Logged?.Invoke(this, new Models.EventArguments.LogEventArgs(log));
+			// Escribe el log en los logger (para los que lo tienen que mostrar instantáneamente
+			foreach (Interfaces.ILogWriter writer in Writers)
+				writer.Logged(log);
+			// Añade el item a la colección de elementos pendientes
+			lock (Items)
+			{
+				Items.Add(log);
+			}
+			// Envía un flush automático si es necesario
+			if (Items.Count >= MaxItems)
+				Flush();
 		}
 
 		/// <summary>
@@ -56,7 +74,26 @@ namespace Bau.Libraries.LibLogger.Core
 		/// </summary>
 		public void Flush()
 		{
-			Contexts.Flush();
+			// Lanza los últimos elementos de log
+			foreach ((string _, ContextModel context) in Contexts.Enumerate())
+				if (context.LogItems.LastLog != null)
+					context.LogItems.Reset(); //? ... esto va a lanzar un RaiseLog, que en el caso que tengamos un número máximo de elementos lanzaría de nuevo un flush, por eso el if
+			// Envía los elementos
+			lock (Items)
+			{
+				if (Items.Count > 0)
+				{
+					// Envía los contextos al generador
+					foreach (Interfaces.ILogWriter writer in Writers)
+						foreach ((string _, ContextModel context) in Contexts.Enumerate())
+							writer.Flush(Items);
+					// Elimina los datos actuales de los contextos
+					foreach ((string _, ContextModel context) in Contexts.Enumerate())
+						context.Reset();
+					// Limpia los elementos pendientes por escribir
+					Items.Clear();
+				}
+			}
 		}
 
 		/// <summary>
@@ -85,12 +122,12 @@ namespace Bau.Libraries.LibLogger.Core
 		/// <summary>
 		///		Objetos de persistencia de los elementos de log
 		/// </summary>
-		public List<Writers.ILogWriter> Writers { get; } = new List<Writers.ILogWriter>();
+		private List<Interfaces.ILogWriter> Writers { get; } = new List<Interfaces.ILogWriter>();
 
 		/// <summary>
 		///		Contextos
 		/// </summary>
-		private ContextModelCollection Contexts { get; }
+		private ContextModelCollection Contexts { get; } = new ContextModelCollection();
 
 		/// <summary>
 		///		Contexto predeterminado
@@ -98,8 +135,18 @@ namespace Bau.Libraries.LibLogger.Core
 		public ContextModel Default { get; }
 
 		/// <summary>
+		///		Número máximo de elementos que se mantienen en memoria antes de hacer un flush automático
+		/// </summary>
+		public int MaxItems { get; }
+
+		/// <summary>
 		///		Indica si se ha liberado el objeto
 		/// </summary>
 		public bool IsDisposed { get; private set; }
+
+		/// <summary>
+		///		Elementos de log que quedan por escribir
+		/// </summary>
+		private List<LogModel> Items { get; } = new List<LogModel>();
 	}
 }

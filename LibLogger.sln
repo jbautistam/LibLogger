@@ -5,7 +5,15 @@ VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibLogger.Core", "src\LibLogger.Core\LibLogger.Core.csproj", "{5E79352E-841F-481D-85A4-C76B929C6ECF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibLogger.Test", "Tests\LibLogger.Test\LibLogger.Test.csproj", "{E1E98928-1DC3-4F93-9C0E-0964A16BAF22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibLogger.Test", "Tests\LibLogger.Test\LibLogger.Test.csproj", "{E1E98928-1DC3-4F93-9C0E-0964A16BAF22}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibLogger.Models", "src\LibLogger.Models\LibLogger.Models.csproj", "{76CD5902-A4F2-48A1-9C18-B7711DEC672B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibLogger.Interfaces", "src\LibLogger.Interfaces\LibLogger.Interfaces.csproj", "{0DE2CF05-16DD-461D-9D57-ECBCBF98B954}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibLogger.Writer.Files", "src\LibLogger.Writer.Files\LibLogger.Writer.Files.csproj", "{1FE99E41-7EAE-4F69-BFF7-40B7678C4C32}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logger", "Logger", "{CE6BEA10-0B78-4FA1-90CE-56360DC01785}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +29,27 @@ Global
 		{E1E98928-1DC3-4F93-9C0E-0964A16BAF22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1E98928-1DC3-4F93-9C0E-0964A16BAF22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1E98928-1DC3-4F93-9C0E-0964A16BAF22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76CD5902-A4F2-48A1-9C18-B7711DEC672B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76CD5902-A4F2-48A1-9C18-B7711DEC672B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76CD5902-A4F2-48A1-9C18-B7711DEC672B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76CD5902-A4F2-48A1-9C18-B7711DEC672B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DE2CF05-16DD-461D-9D57-ECBCBF98B954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DE2CF05-16DD-461D-9D57-ECBCBF98B954}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DE2CF05-16DD-461D-9D57-ECBCBF98B954}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DE2CF05-16DD-461D-9D57-ECBCBF98B954}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE99E41-7EAE-4F69-BFF7-40B7678C4C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE99E41-7EAE-4F69-BFF7-40B7678C4C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE99E41-7EAE-4F69-BFF7-40B7678C4C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FE99E41-7EAE-4F69-BFF7-40B7678C4C32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E79352E-841F-481D-85A4-C76B929C6ECF} = {CE6BEA10-0B78-4FA1-90CE-56360DC01785}
+		{76CD5902-A4F2-48A1-9C18-B7711DEC672B} = {CE6BEA10-0B78-4FA1-90CE-56360DC01785}
+		{0DE2CF05-16DD-461D-9D57-ECBCBF98B954} = {CE6BEA10-0B78-4FA1-90CE-56360DC01785}
+		{1FE99E41-7EAE-4F69-BFF7-40B7678C4C32} = {CE6BEA10-0B78-4FA1-90CE-56360DC01785}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD386CC5-59CF-42C4-88EA-A383F402A2D2}
